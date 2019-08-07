@@ -4,14 +4,13 @@ class UnoGame {
 
     constructor(expectedPlayers, roundsToPlay)
     {
-        //declare Variables
-        this.players = [];  //player_name, player_id
+        this.players = [];  //player_name, player_id, score
         this.gameEngine;
-        this.DEBUG_MODE = true;
+        this.DEBUG_MODE = false;
 
         this.expectedPlayers = expectedPlayers;
         this.roundsToPlay = roundsToPlay;
-        this.round = 0;
+        this.round = 1;
     }
 
     registerPlayer(playerName)
@@ -22,7 +21,7 @@ class UnoGame {
         for ( var i = 0; i < 10; i++ ) {
            hash += characters.charAt(Math.floor(Math.random() * charactersLength));
         }
-        this.players.push({'player_name': playerName, 'player_id': hash});
+        this.players.push({'player_name': playerName, 'player_id': hash, 'score': 0});
         
         if(this.expectedPlayers <= this.players.length)this.initGame();
 
@@ -30,9 +29,9 @@ class UnoGame {
     }
 
     initGame(){
-        var player = this.players.map(pl => pl.player_name);
+        var player = this.players.map(pl => pl.player_id);
         this.gameEngine = new Game(player, []);
-        this.gameEngine.on('end', this.endGame);
+        this.gameEngine.on('end', this.endGame.bind(this));
 
         this.gameEngine.on('nextplayer', (data) => {
             if(this.DEBUG_MODE) console.log(":: Nächster Spieler");
@@ -40,12 +39,10 @@ class UnoGame {
 
         this.gameEngine.on('cardplay', (data) => {
             if(this.DEBUG_MODE) console.log(">> Karte gespielt "+ Values[data.card.value] +"-"+ Colors[data.card.color]);
-            console.log(data.card);
         });
 
         this.gameEngine.on('draw', (data) => {
             if(this.DEBUG_MODE) console.log("<< Karte gezogen "+ Values[data.cards[0].value] +"-"+ Colors[data.cards[0].color]);
-            console.log(data.cards);
         });
     
     }
@@ -75,8 +72,22 @@ class UnoGame {
 
     endGame(data){
         console.log("END THE GAME!");
-        this.FINISHED = true;
-        console.log(data);
+
+        let winner = this.players.find(function(player){
+            return player.player_id === data.winner.name;
+        });
+
+        winner.score += data.score;
+        this.round++;
+        
+        console.log(this.players);
+        
+        this.gameEngine = null;
+        
+        if(this.roundsToPlay >= this.round){
+            this.initGame();
+            this.autoplay2();
+        }
     }
 
 
@@ -86,7 +97,7 @@ class UnoGame {
         return {
             'currentPlayer': this.gameEngine.currentPlayer,
             'discardedCard': this.gameEngine.discardedCard,
-            'allPlayers': this.players.map(pl => this.gameEngine.getPlayer(pl.player_name)),
+            'allPlayers': this.players.map(pl => this.gameEngine.getPlayer(pl.player_id)),
         };
     }
 

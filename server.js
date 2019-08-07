@@ -1,10 +1,12 @@
-let express = require('express');
-let app = express();
+let configuration = {
+    'expected_player': 3,
+    'rounds_to_play': 6,
+    'database_name' : 'mongo_test'
+};
 
-let UnoGame = require('./src/uno-game');
 let AutoplayUnoGame = require('./src/autoplay');
 
-var theUno = new AutoplayUnoGame(2,200);
+var theUno = new AutoplayUnoGame(configuration.expected_player, configuration.rounds_to_play);
 
 theUno.registerPlayer("john");
 theUno.registerPlayer("mustafa");
