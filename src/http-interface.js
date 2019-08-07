@@ -5,14 +5,15 @@ let app = express();
 class HttpInterface{
 
 
-    constructor(){
+    constructor(UnoGame){
+        this.UnoGame = UnoGame;
         app.use(express.static(__dirname));
 
         app.use(express.json()) // for parsing application/json
         app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
 
         
-        app.post('/join', this.join);
+        app.post('/join', this.join.bind(this));
         app.get('/games', this.getGames);
         app.post('/games', this.postGames);
 
@@ -25,10 +26,12 @@ class HttpInterface{
 
     join(req, res){
         try {
-            if (req.body.name === undefined || req.body.name.length == 0) {
+            if (req.body.name === null || req.body.name === "") {
                 throw '400: No name set';
             }
-            res.send("Ein neuer Spieler ist gejoint: >>> "+ req.body.name + " <<<");//Data Type: URLencoded form data, Name = name; Value = $PLAYERNAME
+            
+            var hash = this.UnoGame.registerPlayer(req.body.name);
+            res.send("Ein neuer Spieler ist gejoint: >>> "+ req.body.name + " mit dem Hash: "+ hash +" <<<");
         } catch (error) {
             res.send('Es ist ein Fehler aufgetreten: '+error);
         }

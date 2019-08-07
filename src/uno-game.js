@@ -24,7 +24,6 @@ class UnoGame {
         this.players.push({'player_name': playerName, 'player_id': hash, 'score': 0});
         
         if(this.expectedPlayers <= this.players.length)this.initGame();
-
         return hash;
     }
 
@@ -44,7 +43,8 @@ class UnoGame {
         this.gameEngine.on('draw', (data) => {
             if(this.DEBUG_MODE) console.log("<< Karte gezogen "+ Values[data.cards[0].value] +"-"+ Colors[data.cards[0].color]);
         });
-    
+
+        this.autoplay2();
     }
 
     //PLAYING THE GAME
