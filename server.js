@@ -1,28 +1,17 @@
-let express = require('express');
-let app = express();
-
+let HttpInterface = require('./src/http-interface');
 let UnoGame = require('./src/uno-game');
 let AutoplayUnoGame = require('./src/autoplay');
 
-var theUno = new AutoplayUnoGame(2,200);
+//var theUno = new AutoplayUnoGame(2,200);
 
-theUno.registerPlayer("john");
-theUno.registerPlayer("mustafa");
-theUno.registerPlayer("vincent");
-
-
-console.log(theUno.getGameState());
-
-theUno.autoplay2();
+//theUno.registerPlayer("john");
+//theUno.registerPlayer("mustafa");
+//theUno.registerPlayer("vincent");
 
 
-/*
-app.use(express.static(__dirname));
+//console.log(theUno.getGameState());
 
-app.get('/', function (req, res) {
-    res.send('Hello World!');
-});
-  
-app.listen(3000, function () {
-    console.log('Example app listening on port 3000!');
-});*/
+//theUno.autoplay2();
+
+var theInterface = new HttpInterface();
+
