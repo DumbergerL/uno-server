@@ -8,16 +8,17 @@ let AutoplayUnoGame = require('./src/autoplay');
 
 var theUno = new AutoplayUnoGame(configuration.expected_player, configuration.rounds_to_play);
 
-theUno.registerPlayer("john");
-theUno.registerPlayer("mustafa");
-var hash = theUno.registerPlayer("vincent");
+var hash1 = theUno.registerPlayer("john");
+var hash2 = theUno.registerPlayer("mustafa");
+var hash3 = theUno.registerPlayer("vincent");
 
-console.log(theUno.getGameState());
+var getStatus = theUno.getGameStatePerson(hash1);
+console.log(getStatus);
 
-console.log("---->");
-console.log(theUno.getGameStatePerson(hash));
+console.log(theUno.getCardsPerson(hash1));
+console.log(theUno.getCard(hash1, getStatus.hand[0]));
 
-theUno.autoplay2();
+//theUno.autoplay2();
 
 
 /*

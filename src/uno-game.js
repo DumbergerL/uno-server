@@ -70,6 +70,32 @@ class UnoGame {
         return this.gameEngine.currentPlayer;
     }
 
+    getPerson(person_id){
+        return this.gameEngine.getPlayer(person_id);
+    }
+    
+    getCardsPerson(person_id){
+        return this.getPerson(person_id).hand;
+    }
+
+    getCard(person_id, card_obj){
+        var cards = this.getCardsPerson(person_id);
+        for(var i = 0; i < cards.length; i++){
+            if(Colors[cards[i].color] === card_obj.color && Values[cards[i].value] === card_obj.value)return cards[i];
+        }
+        return null;
+    }
+
+    hasCard(person_id, card_obj){
+        try{
+            this.getCard(person_id, card_obj);
+            return true;
+        }catch(e){
+            return false;
+        }
+    }
+
+
     endGame(data){
         console.log("END THE GAME!");
 
@@ -101,18 +127,18 @@ class UnoGame {
         };
     }
 
-    getGameStatePerson(hash)
+    getGameStatePerson(person_id)
     {
         let output = {};
-        var person = this.gameEngine.getPlayer(hash);
+        var person = this.gameEngine.getPlayer(person_id);
         if(person === this.gameEngine.currentPlayer){
             output.my_turn = true;
         }else{
             output.my_turn = false;
         }
 
-        output.hand = person.hand.map( (card) => {return {color: card.color, value: card.value}});
-        output.discarded_card = this.gameEngine.discardedCard;
+        output.hand = person.hand.map( (card) => {return {color: Colors[card.color], value: Values[card.value]}});
+        output.discarded_card = {color: Colors[this.gameEngine.discardedCard.color], value: Values[this.gameEngine.discardedCard.value]};
         return output;
     }
 
