@@ -10,10 +10,12 @@ var theUno = new AutoplayUnoGame(configuration.expected_player, configuration.ro
 
 theUno.registerPlayer("john");
 theUno.registerPlayer("mustafa");
-theUno.registerPlayer("vincent");
-
+var hash = theUno.registerPlayer("vincent");
 
 console.log(theUno.getGameState());
+
+console.log("---->");
+console.log(theUno.getGameStatePerson(hash));
 
 theUno.autoplay2();
 

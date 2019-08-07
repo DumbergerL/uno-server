@@ -6,7 +6,7 @@ class UnoGame {
     {
         this.players = [];  //player_name, player_id, score
         this.gameEngine;
-        this.DEBUG_MODE = false;
+        this.DEBUG_MODE = true;
 
         this.expectedPlayers = expectedPlayers;
         this.roundsToPlay = roundsToPlay;
@@ -99,6 +99,21 @@ class UnoGame {
             'discardedCard': this.gameEngine.discardedCard,
             'allPlayers': this.players.map(pl => this.gameEngine.getPlayer(pl.player_id)),
         };
+    }
+
+    getGameStatePerson(hash)
+    {
+        let output = {};
+        var person = this.gameEngine.getPlayer(hash);
+        if(person === this.gameEngine.currentPlayer){
+            output.my_turn = true;
+        }else{
+            output.my_turn = false;
+        }
+
+        output.hand = person.hand.map( (card) => {return {color: card.color, value: card.value}});
+        output.discarded_card = this.gameEngine.discardedCard;
+        return output;
     }
 
 }

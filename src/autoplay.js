@@ -32,7 +32,7 @@ class Autoplay extends UnoGame{
             try{
                 this.autoplay2();
             }catch(e){}
-        }, 100); 
+        }, 800); 
     }
 
     autoplay(){
