@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/DumbergerL/uno-bot#readme",
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "uno-engine": "^0.1.1-alpha"
   }
 }
