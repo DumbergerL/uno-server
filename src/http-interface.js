@@ -21,9 +21,19 @@ class HttpInterface{
         });
     }
 
+
+
     join(req, res){
-        //console.log(req);
-        res.send("Ein neuer Spieler ist gejoint: >>> "+ req.body.name + " <<<");
+        try {
+            if (req.body.name === undefined || req.body.name.length == 0) {
+                throw '400: No name set';
+            }
+            res.send("Ein neuer Spieler ist gejoint: >>> "+ req.body.name + " <<<");//Data Type: URLencoded form data, Name = name; Value = $PLAYERNAME
+        } catch (error) {
+            res.send('Es ist ein Fehler aufgetreten: '+error);
+        }
+
+
     }
 
     getGames(req, res){

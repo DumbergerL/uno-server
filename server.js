@@ -7,7 +7,6 @@ let HttpInterface = require('./src/http-interface');
 let UnoGame = require('./src/uno-game');
 let AutoplayUnoGame = require('./src/autoplay');
 
-
 var theUno = new AutoplayUnoGame(configuration.expected_player, configuration.rounds_to_play);
 
 var hash1 = theUno.registerPlayer("john");
