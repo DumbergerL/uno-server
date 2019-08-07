@@ -9,12 +9,10 @@ class Autoplay extends UnoGame{
     }
     
     autoplay2(){
-        this.visualizeCards();
-        //console.log("_________________________________________________________________");
+        if(this.DEBUG_MODE)this.visualizeCards();
+        
         var currentPlayer = this.gameEngine.currentPlayer;
         var playedCard = false;
-
-        //console.log("Current Player: "+currentPlayer.name + "("+currentPlayer.hand.length+")");
 
         var playedCard = false;
         for(var i = 0; i < currentPlayer.hand.length; i++){
@@ -31,8 +29,10 @@ class Autoplay extends UnoGame{
         }
 
         setTimeout(() => {
+            try{
                 this.autoplay2();
-        }, 250); 
+            }catch(e){}
+        }, 800); 
     }
 
     autoplay(){
