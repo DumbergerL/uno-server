@@ -6,7 +6,7 @@ class UnoGame {
     {
         this.players = [];  //player_name, player_id, score
         this.gameEngine;
-        this.DEBUG_MODE = false;
+        this.DEBUG_MODE = true;
 
         this.expectedPlayers = expectedPlayers;
         this.roundsToPlay = roundsToPlay;
@@ -19,7 +19,7 @@ class UnoGame {
         var hash = '';
         var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
         var charactersLength = characters.length;
-        for ( var i = 0; i < 10; i++ ) {
+        for ( var i = 0; i < 4; i++ ) {
            hash += characters.charAt(Math.floor(Math.random() * charactersLength));
         }
         var playerdata = {'player_name': playerName, 'player_id': hash, 'score': 0};
@@ -57,6 +57,9 @@ class UnoGame {
 
     //PLAYING THE GAME
     playCard(card){
+        //console.log("hello world!");
+        //console.log(card);
+        //return;
         if(card){
             this.gameEngine.play(card);
         }else{
@@ -89,7 +92,13 @@ class UnoGame {
     getCard(person_id, card_obj){
         var cards = this.getCardsPerson(person_id);
         for(var i = 0; i < cards.length; i++){
+            if(card_obj.value == "WILD" || card_obj.value == "WILD_DRAW_FOUR"){
+                var card = cards[i];
+                card.color = Colors[card_obj.color];
+                return card;
+            }
             if(Colors[cards[i].color] === card_obj.color && Values[cards[i].value] === card_obj.value)return cards[i];
+            //console.log("-->"+Colors[cards[i].color]+"|"+card_obj.color+"&"+Values[cards[i].value]+"|"+card_obj.value);
         }
         return null;
     }

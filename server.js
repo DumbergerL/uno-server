@@ -9,9 +9,9 @@ let AutoplayUnoGame = require('./src/autoplay');
 
 var theUno = new UnoGame(configuration.expected_player, configuration.rounds_to_play);
 
-//var hash1 = theUno.registerPlayer("john");
-//var hash2 = theUno.registerPlayer("mustafa");
-//var hash3 = theUno.registerPlayer("vincent");
+var hash1 = theUno.registerPlayer("john");
+var hash2 = theUno.registerPlayer("mustafa");
+var hash3 = theUno.registerPlayer("vincent");
 
 //var rawHandCards = theUno.getGameStatePerson(hash1).hand;
 //console.log(rawHandCards);

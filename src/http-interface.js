@@ -43,23 +43,27 @@ class HttpInterface{
     }
 
     postGames(req, res){
-        console.log(this.UnoGame.getCurrentPlayer().name);
-        console.log(req.query.id);
         if (req.query.id != this.UnoGame.getCurrentPlayer().name) {
-            throw 403;//forbidden, spieler ist nicht am zug zum zeitpunkt der post anfrage
+            throw 403;  //forbidden, spieler ist nicht am zug zum zeitpunkt der post anfrage
         }
         if (!req.body.hasOwnProperty('play_card')) {//prüfen ob karte vorhanden
             throw 400;
         }
+
         var card = null;
-        if (req.body.playCard != null) {//prüfen ob karte null (=karte ziehen)
+        if (req.body.play_card != null) {//prüfen ob karte null (=karte ziehen)
             if (!req.body.play_card.hasOwnProperty('color') || !req.body.play_card.hasOwnProperty('value')) {//prüfen ob karte die nicht null valid ist
                 throw 400;
             }
-            card  = getCard(req.query.id, req.body.play_card);//karte im system auswählen
+            if(!this.UnoGame.hasCard(req.query.id, req.body.play_card))throw 400;
+            
+            card = this.UnoGame.getCard(req.query.id, req.body.play_card);//karte im system auswählen
+            if(card === null)throw 400;
         }
-        playCard(card);//karte spielen
+        console.log(card);
+        this.UnoGame.playCard(card);//karte spielen
 
+        this.getGames(req, res);
     }
 
     //...
@@ -84,15 +88,12 @@ class HttpInterface{
     }
 
     middleware_errohandler(err, req, res, next){
-
-        var status_code = parseInt(err) ? parseInt(err) : 500;
-        if (status_code === 500) {
-            res.send(err);
+        var status_code = parseInt(err);
+        if(isNaN(status_code)){
+            status_code = 500;
         }
-        else{
-            res.status(status_code).send();
-        }
-   
+        res.status(status_code);
+        res.json({error: err.stack});
     }
 }
 
