@@ -1,4 +1,7 @@
 let express = require('express');
+let rateLimit = require('express-rate-limit');
+let slowDown = require("express-slow-down");
+
 let app = express();
 
 
@@ -13,25 +16,49 @@ class HttpInterface{
 
         app.use(this.middleware_authorize.bind(this));
 
+        //var limiter = rateLimit({
+        //    windowsMs:  1000,         // 50 ms
+        //    max: 500                 // Limit each IP to XY requests per windowMS
+        //});
+        //app.use(limiter);
 
+        var speedLimiter = slowDown({
+            windowMs: 1000, // 15 minutes
+            delayAfter: 100, // allow 100 requests per 15 minutes, then...
+            delayMs: 100 // begin adding 500ms of delay per request above 100:
+            // request # 101 is delayed by  500ms
+            // request # 102 is delayed by 1000ms
+            // request # 103 is delayed by 1500ms
+            // etc.
+        });
+        app.use(speedLimiter);
+
+        app.get('/', this.startpage.bind(this));
         app.post('/join', this.join.bind(this));
         app.get('/games', this.getGames.bind(this));
         app.post('/games', this.postGames.bind(this));
 
-        app.use(this.middleware_errohandler);
+        app.use(this.middleware_errorhandler);
         
         app.listen(3000, function () {
             console.log('\nUno-Server started and listening to port 3000!');
         });
     }
 
+    startpage(req, res){
+        var output = "";
+        output += "<h1>Uno Game Server</h1>";
+        output += "<rem>"+JSON.stringify( this.UnoGame.players.map( (pl) => {return {player_name: pl.player_name, score: pl.score }}) )+"</rem>";
+
+        res.send(output);
+    }
+
     join(req, res){
-        
-            if (req.body.name === null || req.body.name === "" || !req.body.hasOwnProperty('name')) {
-                throw {code: 400, message: "Parameter not valid"};
-            }
-            var hash = this.UnoGame.registerPlayer(req.body.name);
-            res.json({player_id: hash, player_name: req.body.name});
+        if (req.body.name === null || req.body.name === "" || !req.body.hasOwnProperty('name')) {
+            throw {code: 400, message: "Parameter not valid"};
+        }
+        var hash = this.UnoGame.registerPlayer(req.body.name);
+        res.json({player_id: hash, player_name: req.body.name});
     }
 
     getGames(req, res){
@@ -80,7 +107,7 @@ class HttpInterface{
         next();
     }
 
-    middleware_errohandler(err, req, res, next){
+    middleware_errorhandler(err, req, res, next){
         var status_code = 500;
         var status_message = err;
 
