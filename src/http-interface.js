@@ -4,7 +4,6 @@ let app = express();
 
 class HttpInterface{
 
-
     constructor(UnoGame){
         this.UnoGame = UnoGame;
         app.use(express.static(__dirname));
@@ -26,12 +25,10 @@ class HttpInterface{
         });
     }
 
-
-
     join(req, res){
         
             if (req.body.name === null || req.body.name === "" || !req.body.hasOwnProperty('name')) {
-                throw 400;
+                throw {code: 400, message: "Parameter not valid"};
             }
             var hash = this.UnoGame.registerPlayer(req.body.name);
             res.json({player_id: hash, player_name: req.body.name});
@@ -44,29 +41,26 @@ class HttpInterface{
 
     postGames(req, res){
         if (req.query.id != this.UnoGame.getCurrentPlayer().name) {
-            throw 403;  //forbidden, spieler ist nicht am zug zum zeitpunkt der post anfrage
+            throw {code: 403, message: "It's not your turn!"};  //forbidden, spieler ist nicht am zug zum zeitpunkt der post anfrage
         }
         if (!req.body.hasOwnProperty('play_card')) {//prüfen ob karte vorhanden
-            throw 400;
+            throw {code: 400, message: "'play_card' Attribute has not been set!"};
         }
 
         var card = null;
         if (req.body.play_card != null) {//prüfen ob karte null (=karte ziehen)
             if (!req.body.play_card.hasOwnProperty('color') || !req.body.play_card.hasOwnProperty('value')) {//prüfen ob karte die nicht null valid ist
-                throw 400;
+                throw {code: 400, message: "'play_card' Object ist not well-formed!"};
             }
-            if(!this.UnoGame.hasCard(req.query.id, req.body.play_card))throw 400;
             
             card = this.UnoGame.getCard(req.query.id, req.body.play_card);//karte im system auswählen
-            if(card === null)throw 400;
+            if(card === null)throw {code: 400, message: "The Card you selected is not on your hand!"};
         }
         console.log(card);
         this.UnoGame.playCard(card);//karte spielen
 
         this.getGames(req, res);
     }
-
-    //...
 
     middleware_authorize(req, res, next){
         if (req.query.hasOwnProperty('id')) {
@@ -81,19 +75,23 @@ class HttpInterface{
             });
 
             if (!valid) {
-                throw 401;
+                throw {code: 401, message: "The player_id is not valid!"};
             }
         }
         next();
     }
 
     middleware_errohandler(err, req, res, next){
-        var status_code = parseInt(err);
-        if(isNaN(status_code)){
-            status_code = 500;
+        var status_code = 500;
+        var status_message = err;
+
+        if(err.hasOwnProperty('code') && err.hasOwnProperty('message')){ //well formed throwed exception
+            status_code = err.code;
+            status_message = err.message;
         }
+        
         res.status(status_code);
-        res.json({error: err.stack});
+        res.json({error: err, stack: err.stack});
     }
 }
 

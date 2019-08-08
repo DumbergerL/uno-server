@@ -15,7 +15,7 @@ class UnoGame {
 
     registerPlayer(playerName)
     {
-        if (this.gameEngine) throw 503;
+        if (this.gameEngine) throw {code: 503, message: "Game has not been startet yet!"};
         var hash = '';
         var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
         var charactersLength = characters.length;
@@ -98,7 +98,6 @@ class UnoGame {
                 return card;
             }
             if(Colors[cards[i].color] === card_obj.color && Values[cards[i].value] === card_obj.value)return cards[i];
-            //console.log("-->"+Colors[cards[i].color]+"|"+card_obj.color+"&"+Values[cards[i].value]+"|"+card_obj.value);
         }
         return null;
     }
