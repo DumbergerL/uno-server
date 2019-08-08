@@ -1,12 +1,12 @@
-const { Game, Colors, Values } = require('uno-engine');
-
+const { Game, Values } = require('uno-engine');
+const { Colors } = require('./custom_color');
 class UnoGame {
 
     constructor(expectedPlayers, roundsToPlay)
     {
         this.players = [];  //player_name, player_id, score
         this.gameEngine;
-        this.DEBUG_MODE = true;
+        this.DEBUG_MODE = false;
 
         this.expectedPlayers = expectedPlayers;
         this.roundsToPlay = roundsToPlay;
@@ -15,15 +15,21 @@ class UnoGame {
 
     registerPlayer(playerName)
     {
+        if (this.gameEngine) throw 503;
         var hash = '';
         var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
         var charactersLength = characters.length;
         for ( var i = 0; i < 10; i++ ) {
            hash += characters.charAt(Math.floor(Math.random() * charactersLength));
         }
-        this.players.push({'player_name': playerName, 'player_id': hash, 'score': 0});
+        var playerdata = {'player_name': playerName, 'player_id': hash, 'score': 0};
+        
+        if(this.players.length <= 0) console.log("\nREGISTER PLAYER");
+        console.log(playerdata);
+        this.players.push(playerdata);
         
         if(this.expectedPlayers <= this.players.length)this.initGame();
+        
         return hash;
     }
 
@@ -44,7 +50,9 @@ class UnoGame {
             if(this.DEBUG_MODE) console.log("<< Karte gezogen "+ Values[data.cards[0].value] +"-"+ Colors[data.cards[0].color]);
         });
 
-        this.autoplay2();
+        console.log("\nINITALIZED / STARTED GAME");
+        console.log('First Player: '+this.gameEngine.currentPlayer);
+        //this.autoplay2();
     }
 
     //PLAYING THE GAME
@@ -130,6 +138,9 @@ class UnoGame {
     getGameStatePerson(person_id)
     {
         let output = {};
+        if (!this.gameEngine) {
+            return output;
+        }
         var person = this.gameEngine.getPlayer(person_id);
         if(person === this.gameEngine.currentPlayer){
             output.my_turn = true;
