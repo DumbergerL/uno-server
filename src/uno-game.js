@@ -39,15 +39,15 @@ class UnoGame {
         this.gameEngine.on('end', this.endGame.bind(this));
 
         this.gameEngine.on('nextplayer', (data) => {
-            if(this.DEBUG_MODE) console.log(":: Nächster Spieler");
+            if(this.DEBUG_MODE) console.log("\n\t:: Nächster Spieler: "+data.player.name);
         });
 
         this.gameEngine.on('cardplay', (data) => {
-            if(this.DEBUG_MODE) console.log(">> Karte gespielt "+ Values[data.card.value] +"-"+ Colors[data.card.color]);
+            if(this.DEBUG_MODE) console.log("\t>> Karte gespielt: "+ Values[data.card.value] +"-"+ Colors[data.card.color]);
         });
 
         this.gameEngine.on('draw', (data) => {
-            if(this.DEBUG_MODE) console.log("<< Karte gezogen "+ Values[data.cards[0].value] +"-"+ Colors[data.cards[0].color]);
+            if(this.DEBUG_MODE) console.log("\t<< Karte gezogen ("+ data.cards.length +"):"+ Values[data.cards[0].value] +"-"+ Colors[data.cards[0].color]);
         });
 
         console.log("\nINITALIZED / STARTED GAME");
@@ -110,7 +110,7 @@ class UnoGame {
 
 
     endGame(data){
-        console.log("END THE GAME!");
+        console.log("\nEND THE GAME!");
 
         let winner = this.players.find(function(player){
             return player.player_id === data.winner.name;

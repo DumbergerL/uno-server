@@ -56,7 +56,6 @@ class HttpInterface{
             card = this.UnoGame.getCard(req.query.id, req.body.play_card);//karte im system auswählen
             if(card === null)throw {code: 400, message: "The Card you selected is not on your hand!"};
         }
-        console.log(card);
         this.UnoGame.playCard(card);//karte spielen
 
         this.getGames(req, res);
