@@ -1,25 +1,23 @@
 let configuration = {
-    'expected_player': 3,
-    'rounds_to_play': 6,
-    'database_name' : 'mongo_test'
+    'expected_player': 2,
+    'rounds_to_play': 2,
+    'database_name' : 'mongo_test',
+    'auto_generated' : 2,
 };
+
 let HttpInterface = require('./src/http-interface');
 let UnoGame = require('./src/uno-game');
 let AutoplayUnoGame = require('./src/autoplay');
 
-
-var theUno = new AutoplayUnoGame(configuration.expected_player, configuration.rounds_to_play);
-
-var hash1 = theUno.registerPlayer("john");
-var hash2 = theUno.registerPlayer("mustafa");
-var hash3 = theUno.registerPlayer("vincent");
-
-//var getStatus = theUno.getGameStatePerson(hash1);
-//console.log(getStatus);
-
-//console.log(theUno.getCardsPerson(hash1));
-//console.log(theUno.getCard(hash1, getStatus.hand[0]));
+var theUno = new UnoGame(configuration.expected_player, configuration.rounds_to_play);
 
 
-var theInterface = new HttpInterface();
+autoPlayer = ['John', 'Mustafa', 'Lukas', 'Vincent', 'Jan', 'Nils', 'Dietmar', 'Hans-Juergen', 'TheBoss', 'Uno-Chef'];
+for(var i = 0; i < configuration.auto_generated; i++)
+{
+    theUno.registerPlayer(autoPlayer[i]);
+}
+
+
+var theInterface = new HttpInterface(theUno);
 

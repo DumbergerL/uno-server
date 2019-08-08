@@ -1,5 +1,5 @@
-const { Game, Colors, Values } = require('uno-engine');
-
+const { Game, Values } = require('uno-engine');
+const { Colors } = require('./custom_color');
 class UnoGame {
 
     constructor(expectedPlayers, roundsToPlay)
@@ -15,16 +15,21 @@ class UnoGame {
 
     registerPlayer(playerName)
     {
+        if (this.gameEngine) throw {code: 503, message: "Game has not been startet yet!"};
         var hash = '';
         var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
         var charactersLength = characters.length;
-        for ( var i = 0; i < 10; i++ ) {
+        for ( var i = 0; i < 4; i++ ) {
            hash += characters.charAt(Math.floor(Math.random() * charactersLength));
         }
-        this.players.push({'player_name': playerName, 'player_id': hash, 'score': 0});
+        var playerdata = {'player_name': playerName, 'player_id': hash, 'score': 0};
+        
+        if(this.players.length <= 0) console.log("\nREGISTER PLAYER");
+        console.log(playerdata);
+        this.players.push(playerdata);
         
         if(this.expectedPlayers <= this.players.length)this.initGame();
-
+        
         return hash;
     }
 
@@ -34,17 +39,20 @@ class UnoGame {
         this.gameEngine.on('end', this.endGame.bind(this));
 
         this.gameEngine.on('nextplayer', (data) => {
-            if(this.DEBUG_MODE) console.log(":: Nächster Spieler");
+            if(this.DEBUG_MODE) console.log("\n\t:: Nächster Spieler: "+data.player.name);
         });
 
         this.gameEngine.on('cardplay', (data) => {
-            if(this.DEBUG_MODE) console.log(">> Karte gespielt "+ Values[data.card.value] +"-"+ Colors[data.card.color]);
+            if(this.DEBUG_MODE) console.log("\t>> Karte gespielt: "+ Values[data.card.value] +"-"+ Colors[data.card.color]);
         });
 
         this.gameEngine.on('draw', (data) => {
-            if(this.DEBUG_MODE) console.log("<< Karte gezogen "+ Values[data.cards[0].value] +"-"+ Colors[data.cards[0].color]);
+            if(this.DEBUG_MODE) console.log("\t<< Karte gezogen ("+ data.cards.length +"):"+ Values[data.cards[0].value] +"-"+ Colors[data.cards[0].color]);
         });
-    
+
+        console.log("\nINITALIZED / STARTED GAME");
+        console.log('First Player: '+this.gameEngine.currentPlayer);
+        //this.autoplay2();
     }
 
     //PLAYING THE GAME
@@ -81,6 +89,11 @@ class UnoGame {
     getCard(person_id, card_obj){
         var cards = this.getCardsPerson(person_id);
         for(var i = 0; i < cards.length; i++){
+            if((Values[cards[i].value] == "WILD" || Values[cards[i].value] == "WILD_DRAW_FOUR") && (card_obj.value == "WILD" ||card_obj.value == "WILD_DRAW_FOUR")){
+                var card = cards[i];
+                card.color = Colors[card_obj.color];
+                return card;
+            }
             if(Colors[cards[i].color] === card_obj.color && Values[cards[i].value] === card_obj.value)return cards[i];
         }
         return null;
@@ -97,7 +110,7 @@ class UnoGame {
 
 
     endGame(data){
-        console.log("END THE GAME!");
+        console.log("\nEND THE GAME!");
 
         let winner = this.players.find(function(player){
             return player.player_id === data.winner.name;
@@ -130,6 +143,9 @@ class UnoGame {
     getGameStatePerson(person_id)
     {
         let output = {};
+        if (!this.gameEngine) {
+            return output;
+        }
         var person = this.gameEngine.getPlayer(person_id);
         if(person === this.gameEngine.currentPlayer){
             output.my_turn = true;
@@ -141,7 +157,6 @@ class UnoGame {
         output.discarded_card = {color: Colors[this.gameEngine.discardedCard.color], value: Values[this.gameEngine.discardedCard.value]};
         return output;
     }
-
 }
 
 module.exports = UnoGame;
