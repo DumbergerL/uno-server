@@ -153,6 +153,12 @@ class UnoGame {
             output.my_turn = false;
         }
 
+        output.other_players = [];
+        this.players.forEach(function(pl) {
+            var playerObj = this.gameEngine.getPlayer(pl.player_id);
+            output.other_players.push({player_name: pl.player_name, card_count: playerObj.hand.length });
+        }.bind(this));
+
         output.hand = person.hand.map( (card) => {return {color: Colors[card.color], value: Values[card.value]}});
         output.discarded_card = {color: Colors[this.gameEngine.discardedCard.color], value: Values[this.gameEngine.discardedCard.value]};
         return output;
