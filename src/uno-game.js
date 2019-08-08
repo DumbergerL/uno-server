@@ -57,9 +57,6 @@ class UnoGame {
 
     //PLAYING THE GAME
     playCard(card){
-        //console.log("hello world!");
-        //console.log(card);
-        //return;
         if(card){
             this.gameEngine.play(card);
         }else{
@@ -160,7 +157,6 @@ class UnoGame {
         output.discarded_card = {color: Colors[this.gameEngine.discardedCard.color], value: Values[this.gameEngine.discardedCard.value]};
         return output;
     }
-
 }
 
 module.exports = UnoGame;
