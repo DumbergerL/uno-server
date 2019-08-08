@@ -92,7 +92,7 @@ class UnoGame {
     getCard(person_id, card_obj){
         var cards = this.getCardsPerson(person_id);
         for(var i = 0; i < cards.length; i++){
-            if(card_obj.value == "WILD" || card_obj.value == "WILD_DRAW_FOUR"){
+            if((Values[cards[i].value] == "WILD" || Values[cards[i].value] == "WILD_DRAW_FOUR") && (card_obj.value == "WILD" ||card_obj.value == "WILD_DRAW_FOUR")){
                 var card = cards[i];
                 card.color = Colors[card_obj.color];
                 return card;

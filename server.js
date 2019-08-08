@@ -1,6 +1,6 @@
 let configuration = {
-    'expected_player': 3,
-    'rounds_to_play': 1,
+    'expected_player': 2,
+    'rounds_to_play': 2,
     'database_name' : 'mongo_test'
 };
 let HttpInterface = require('./src/http-interface');
@@ -11,7 +11,7 @@ var theUno = new UnoGame(configuration.expected_player, configuration.rounds_to_
 
 var hash1 = theUno.registerPlayer("john");
 var hash2 = theUno.registerPlayer("mustafa");
-var hash3 = theUno.registerPlayer("vincent");
+//var hash3 = theUno.registerPlayer("vincent");
 
 //var rawHandCards = theUno.getGameStatePerson(hash1).hand;
 //console.log(rawHandCards);
