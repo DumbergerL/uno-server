@@ -16,7 +16,7 @@ var Card = /** @class */ (function () {
         set: function (color) {
             if (!this.isWildCard())
                 throw new Error('Only wild cards can have theirs colors changed.');
-            else if (color < 0 || color > 3)
+            else if (color < 1|| color > 4)
                 throw new Error('The color must be a value from Colors enum.');
             this._color = color;
         },
