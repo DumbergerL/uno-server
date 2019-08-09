@@ -1,8 +1,7 @@
 let configuration = {
     'expected_player': 2,
-    'rounds_to_play': 2,
-    'database_name' : 'mongo_test',
-    'auto_generated' : 2,
+    'rounds_to_play': 100,
+    'auto_generated' : 0,
 };
 
 let HttpInterface = require('./src/http-interface');
