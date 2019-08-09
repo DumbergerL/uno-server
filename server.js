@@ -1,7 +1,6 @@
 let configuration = {
     'expected_player': 2,
     'rounds_to_play': 100,
-    'database_name' : 'mongo_test',
     'auto_generated' : 0,
 };
 
