@@ -1,5 +1,5 @@
 {
-  "name": "uno-bot",
+  "name": "uno-server",
   "version": "1.0.0",
   "description": "HTTP Schnittstelle für ein UNO Spiel",
   "main": "server.js",
@@ -8,14 +8,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/DumbergerL/uno-bot.git"
+    "url": "git+https://github.com/DumbergerL/uno-server.git"
   },
   "author": "Lukas Dumberger",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/DumbergerL/uno-bot/issues"
+    "url": "https://github.com/DumbergerL/uno-server/issues"
   },
-  "homepage": "https://github.com/DumbergerL/uno-bot#readme",
+  "homepage": "https://github.com/DumbergerL/uno-server#readme",
   "dependencies": {
     "express": "^4.17.1",
     "express-rate-limit": "^5.0.0",
