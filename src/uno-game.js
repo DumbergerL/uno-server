@@ -1,4 +1,4 @@
-const { Game, Values } = require('uno-engine');
+const { Game, Values } = require('./uno-engine');
 const { Colors } = require('./custom_color');
 class UnoGame {
 

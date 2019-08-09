@@ -1,0 +1,77 @@
+{
+  "_args": [
+    [
+      "uno-engine@0.1.1-alpha",
+      "C:\\repo\\uno-bot"
+    ]
+  ],
+  "_from": "uno-engine@0.1.1-alpha",
+  "_id": "uno-engine@0.1.1-alpha",
+  "_inBundle": false,
+  "_integrity": "sha512-rgU81DeHr4Vl8+OJU1GOu7QK0KV++IDzQoPVOqowD6tsdad2ChxaW5KlVJQ1nlF9CAKSUPVGycLDcoqlCV2k9w==",
+  "_location": "/uno-engine",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "version",
+    "registry": true,
+    "raw": "uno-engine@0.1.1-alpha",
+    "name": "uno-engine",
+    "escapedName": "uno-engine",
+    "rawSpec": "0.1.1-alpha",
+    "saveSpec": null,
+    "fetchSpec": "0.1.1-alpha"
+  },
+  "_requiredBy": [
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/uno-engine/-/uno-engine-0.1.1-alpha.tgz",
+  "_spec": "0.1.1-alpha",
+  "_where": "C:\\repo\\uno-bot",
+  "author": {
+    "name": "Guilherme Ventura",
+    "url": "https://danguilherme.github.io/"
+  },
+  "bugs": {
+    "url": "https://github.com/danguilherme/uno/issues"
+  },
+  "dependencies": {
+    "shuffle": "^0.2.2"
+  },
+  "description": "Uno game implementation in JavaScript",
+  "devDependencies": {
+    "@types/events": "^1.2.0",
+    "@types/jest": "^23.1.0",
+    "chai": "^3.5.0",
+    "jest": "^23.1.0",
+    "ts-jest": "^22.4.6",
+    "tslint": "^5.10.0",
+    "typescript": "^2.9.2",
+    "webpack": "^2.2.1"
+  },
+  "homepage": "https://github.com/danguilherme/uno#readme",
+  "keywords": [
+    "uno",
+    "can-can",
+    "card-game",
+    "cards",
+    "game"
+  ],
+  "license": "MIT",
+  "main": "dist/main.js",
+  "name": "uno-engine",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/danguilherme/uno.git"
+  },
+  "scripts": {
+    "build": "yarn run build:ts && yarn run tslint",
+    "build:ts": "tsc --declaration",
+    "build:ts:watch": "tsc -w",
+    "build:web": "webpack --config webpack.config.js",
+    "prepublish": "yarn build",
+    "test": "jest --coverage --verbose",
+    "test:watch": "yarn test --watchAll",
+    "tslint": "tslint -c tslint.json -p tsconfig.json"
+  },
+  "version": "0.1.1-alpha"
+}
