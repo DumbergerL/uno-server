@@ -1,4 +1,4 @@
-const { Colors } = require('uno-engine');
+const { Colors } = require('./uno-engine');
 const UnoGame = require('./uno-game');
 
 class Autoplay extends UnoGame{
